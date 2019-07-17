@@ -1,8 +1,8 @@
 const express = require('express')
+
+const { getPosts } = require('./controller.feed')
 const router = express.Router()
 
-router.get('/posts', (req, res) => {
-	res.json({ hello: 'world' })
-})
+router.get('/posts', getPosts)
 
 module.exports = router
