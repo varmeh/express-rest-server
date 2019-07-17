@@ -7,7 +7,7 @@ module.exports = app => {
 	// Configure logging first
 	logger(app)
 
-	app.post(bodyParser.json())
+	app.use(bodyParser.json())
 }
 
 /* Logging Configuration */

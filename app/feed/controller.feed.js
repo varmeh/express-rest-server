@@ -6,3 +6,16 @@ exports.getPosts = (req, res) => {
 		]
 	})
 }
+
+exports.createPost = (req, res) => {
+	const { title, content } = req.body
+	// TODO: Create posts in db
+	res.status(201).json({
+		status: 'Post created successfully',
+		post: {
+			id: new Date().toISOString(),
+			title,
+			content
+		}
+	})
+}
