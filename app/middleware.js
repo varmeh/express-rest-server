@@ -21,7 +21,7 @@ function logger(app) {
 /* CORS Handling */
 const corsHandling = (req, res, next) => {
 	// Specify Clients from which Cross Origin Requests are accepted
-	res.setHeader('Access-Control-Allow-Origin', 'localhost:3000, localhost:8080')
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
 
 	// Specify Methods which are accessible from cross-origin requests
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
