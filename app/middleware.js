@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 
@@ -37,4 +38,7 @@ module.exports = app => {
 
 	app.use(bodyParser.json())
 	app.use(corsHandling)
+
+	/* Static data handling - relative path will be travesed in public folder to search data */
+	app.use(express.static('public'))
 }
