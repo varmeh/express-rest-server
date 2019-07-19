@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator')
 
+const { ErrorResponse } = require('../error.manager')
 const { Post } = require('../models')
 
 exports.getPosts = (req, res) => {
@@ -19,13 +20,14 @@ exports.getPosts = (req, res) => {
 	})
 }
 
-exports.createPost = async (req, res) => {
+exports.createPost = async (req, res, next) => {
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
 		// We have validation error
-		res
-			.status(422)
-			.json({ message: 'Validation failed', errors: errors.array() })
+		const errorArray = errors
+			.array()
+			.map(({ value, msg, param }) => `'${param}' has ${msg}: ${value}`)
+		return next(new ErrorResponse(422, 'Validation failure', errorArray))
 	}
 
 	const { title, content } = req.body
@@ -43,9 +45,6 @@ exports.createPost = async (req, res) => {
 			post: result
 		})
 	} catch (error) {
-		console.error('Error in saving Post to db:', error)
-		res.status(500).json({
-			error: error.message
-		})
+		next(new ErrorResponse(500, 'Db Save failure', [error.message]))
 	}
 }
