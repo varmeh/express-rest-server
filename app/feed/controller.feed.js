@@ -3,21 +3,15 @@ const { validationResult } = require('express-validator')
 const { ErrorResponse } = require('../error.manager')
 const { Post } = require('../models')
 
-exports.getPosts = (req, res) => {
-	res.status(200).json({
-		posts: [
-			{
-				_id: '1',
-				title: 'First Post',
-				content: 'This is first post!',
-				imageUrl: 'data/images/emoji-think.jpeg',
-				creator: {
-					name: 'vax'
-				},
-				createdAt: new Date()
-			}
-		]
-	})
+exports.getFeedPosts = async (_req, res, next) => {
+	try {
+		const posts = await Post.find()
+		res.status(200).json({ posts })
+	} catch (error) {
+		next(
+			new ErrorResponse(error.statusCode || 500, error.message, [error.message])
+		)
+	}
 }
 
 exports.createPost = async (req, res, next) => {
