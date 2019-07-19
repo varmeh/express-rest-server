@@ -17,4 +17,6 @@ const userPostValidators = [
 ]
 router.post('/post', userPostValidators, createPost)
 
+router.get('/post/:postId', getPost)
+
 module.exports = router

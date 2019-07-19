@@ -42,3 +42,20 @@ exports.createPost = async (req, res, next) => {
 		next(new ErrorResponse(500, 'Db Save failure', [error.message]))
 	}
 }
+
+exports.getPost = async (req, res, next) => {
+	const { postId } = req.params
+	try {
+		const post = await Post.findById(postId)
+		if (!post) {
+			const error = new Error('Post not found!')
+			error.statusCode = 404
+			throw error
+		}
+		res.status(200).json({ post })
+	} catch (error) {
+		next(
+			new ErrorResponse(error.statusCode || 500, error.message, [error.message])
+		)
+	}
+}
