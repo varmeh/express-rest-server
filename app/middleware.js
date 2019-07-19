@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const multer = require('multer')
 
 /* Logging Configuration */
 function logger(app) {
@@ -32,12 +33,35 @@ const corsHandling = (req, res, next) => {
 	next()
 }
 
+/* Multer configuration */
+const imageStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, path.join('public', 'images'))
+	},
+	filename: (req, file, cb) => {
+		cb(null, new Date().toISOString() + '-' + file.originalname)
+	}
+})
+
+const imageFilter = (req, file, cb) => {
+	cb(
+		null,
+		file.mimetype == 'image/png' ||
+			file.mimetype == 'image/jpg' ||
+			file.mimetype == 'image/jpeg'
+	)
+}
+
 module.exports = app => {
 	// Configure logging first
 	logger(app)
 
 	app.use(bodyParser.json())
 	app.use(corsHandling)
+
+	app.use(
+		multer({ storage: imageStorage, fileFilter: imageFilter }).single('image')
+	)
 
 	/* Static data handling - relative path will be travesed in public folder to search data */
 	app.use(express.static('public'))
