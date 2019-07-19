@@ -24,11 +24,17 @@ exports.createPost = async (req, res, next) => {
 		return next(new ErrorResponse(422, 'Validation failure', errorArray))
 	}
 
+	if (!req.file) {
+		return next(
+			new ErrorResponse(422, 'No image provided', ['Please select an image.'])
+		)
+	}
+
 	const { title, content } = req.body
 	const post = new Post({
 		title,
 		content,
-		imageUrl: 'data/images/emoji-think.jpeg',
+		imageUrl: req.file.path.replace('public/', ''),
 		creator: { name: 'dummy' }
 	})
 	try {
