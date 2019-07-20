@@ -6,10 +6,15 @@ const { validationResult } = require('express-validator')
 const { ErrorResponse } = require('../error.manager')
 const { Post } = require('../models')
 
-exports.getFeedPosts = async (_req, res, next) => {
+const POSTS_PER_PAGE = 2
+exports.getFeedPosts = async (req, res, next) => {
+	const currentPage = req.query.page || 1
 	try {
+		const totalItems = await Post.find().count()
 		const posts = await Post.find()
-		res.status(200).json({ posts })
+			.skip((currentPage - 1) * POSTS_PER_PAGE)
+			.limit(POSTS_PER_PAGE)
+		res.status(200).json({ posts, totalItems })
 	} catch (error) {
 		next(
 			new ErrorResponse(error.statusCode || 500, error.message, [error.message])
@@ -114,7 +119,7 @@ exports.deletePost = async (req, res, next) => {
 				new ErrorResponse(404, 'Post not found!', ['Post not found!'])
 			)
 		}
-		
+
 		clearImage(post.imageUrl)
 		const result = await Post.findByIdAndRemove(postId)
 		res.status(200).json({ post: result })
