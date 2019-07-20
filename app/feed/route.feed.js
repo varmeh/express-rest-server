@@ -5,7 +5,8 @@ const {
 	getFeedPosts,
 	createPost,
 	getPost,
-	updatePost
+	updatePost,
+	deletePost
 } = require('./controller.feed')
 const router = express.Router()
 
@@ -25,5 +26,7 @@ router.post('/post', userPostValidators, createPost)
 router.get('/post/:postId', getPost)
 
 router.put('/post/:postId', userPostValidators, updatePost)
+
+router.delete('/post/:postId', deletePost)
 
 module.exports = router

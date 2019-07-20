@@ -101,7 +101,25 @@ exports.updatePost = async (req, res, next) => {
 		const result = await post.save()
 		res.status(200).json({ post: result })
 	} catch (error) {
-		next(new ErrorResponse(500, 'Db Save failure', [error.message]))
+		next(new ErrorResponse(500, 'Server Issue', [error.message]))
+	}
+}
+
+exports.deletePost = async (req, res, next) => {
+	const { postId } = req.params
+	try {
+		const post = await Post.findById(postId)
+		if (!post) {
+			return next(
+				new ErrorResponse(404, 'Post not found!', ['Post not found!'])
+			)
+		}
+		
+		clearImage(post.imageUrl)
+		const result = await Post.findByIdAndRemove(postId)
+		res.status(200).json({ post: result })
+	} catch (error) {
+		next(new ErrorResponse(500, 'Server Issue', [error.message]))
 	}
 }
 
