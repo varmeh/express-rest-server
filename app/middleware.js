@@ -60,6 +60,7 @@ module.exports = app => {
 	app.use(corsHandling)
 
 	app.use(
+		'/feed/post',
 		multer({ storage: imageStorage, fileFilter: imageFilter }).single('image')
 	)
 
