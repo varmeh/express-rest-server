@@ -52,6 +52,16 @@ const imageFilter = (req, file, cb) => {
 	)
 }
 
+/*  req.file.path is used as input in imageUrl.
+	If used directly, it would add public word to url as well - public/images/</image-name>.
+	Logic removes `public` here, so that all static data search has usable relative path - images/</image-name> */
+const removePublicFromImageUrl = (req, res, next) => {
+	if (req.file) {
+		req.file.path = req.file.path.replace('public/', '')
+	}
+	next()
+}
+
 module.exports = app => {
 	// Configure logging first
 	logger(app)
@@ -61,7 +71,8 @@ module.exports = app => {
 
 	app.use(
 		'/feed/post',
-		multer({ storage: imageStorage, fileFilter: imageFilter }).single('image')
+		multer({ storage: imageStorage, fileFilter: imageFilter }).single('image'),
+		removePublicFromImageUrl
 	)
 
 	/* Static data handling - relative path will be travesed in public folder to search data */

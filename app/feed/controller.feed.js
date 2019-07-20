@@ -34,7 +34,7 @@ exports.createPost = async (req, res, next) => {
 	const post = new Post({
 		title,
 		content,
-		imageUrl: req.file.path.replace('public/', ''),
+		imageUrl: req.file.path,
 		creator: { name: 'dummy' }
 	})
 	try {
