@@ -13,7 +13,7 @@ exports.errorResponse = (error, _req, res, _next) => {
 }
 
 /* Standardized Error */
-exports.ErrorResponse = class ErrorResponse extends Error {
+const ErrorResponse = class extends Error {
 	constructor(statusCode = 500, message = '', errors = []) {
 		super(message)
 
@@ -24,6 +24,8 @@ exports.ErrorResponse = class ErrorResponse extends Error {
 		this.errors = errors
 	}
 }
+
+exports.ErrorResponse = this.ErrorResponse
 
 /* Validation Error Handler */
 exports.validationErrorHandler = (req, res, next) => {
