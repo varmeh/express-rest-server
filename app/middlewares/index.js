@@ -4,9 +4,10 @@ const bodyParser = require('body-parser')
 const { terminalLogger, fileLogger } = require('./logger')
 const corsHandler = require('./corsHandler')
 const { imageLoader, removePublicFromImageUrl } = require('./upload')
+
 const jwtValidator = require('./jwtValidator')
 
-module.exports = app => {
+exports.configureMiddlewares = app => {
 	// Configure logging first
 	app.use(terminalLogger)
 	app.use(fileLogger)
@@ -22,3 +23,10 @@ module.exports = app => {
 	/* Static data handling - relative path will be travesed in public folder to search data */
 	app.use(express.static('public'))
 }
+
+/* 	Jwt Validation
+	app.use(jwtValidator) not possible as it works for all http methods including OPTIONS 
+	(send by browser authomatically for CORS validation - to check allowed url, methods & headers).
+	So, add specifically to required methods
+*/
+exports.jwtValidator = jwtValidator

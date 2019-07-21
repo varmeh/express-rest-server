@@ -1,6 +1,7 @@
 const express = require('express')
 const { body } = require('express-validator')
 
+const { jwtValidator } = require('../middlewares')
 const { validationErrorHandler } = require('../error.manager')
 
 const {
@@ -13,7 +14,7 @@ const {
 
 const router = express.Router()
 
-router.get('/posts', getFeedPosts)
+router.get('/posts', jwtValidator, getFeedPosts)
 
 const userPostValidators = [
 	body('title')
@@ -24,17 +25,24 @@ const userPostValidators = [
 		.trim()
 		.isLength({ min: 5 })
 ]
-router.post('/post', userPostValidators, validationErrorHandler, createPost)
+router.post(
+	'/post',
+	jwtValidator,
+	userPostValidators,
+	validationErrorHandler,
+	createPost
+)
 
-router.get('/post/:postId', getPost)
+router.get('/post/:postId', jwtValidator, getPost)
 
 router.put(
 	'/post/:postId',
+	jwtValidator,
 	userPostValidators,
 	validationErrorHandler,
 	updatePost
 )
 
-router.delete('/post/:postId', deletePost)
+router.delete('/post/:postId', jwtValidator, deletePost)
 
 module.exports = router

@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 
-const configureMiddlewares = require('./middlewares')
+const { configureMiddlewares } = require('./middlewares')
 const integrateRoutes = require('./route.integrator')
 const { logError, sendErrorResponse } = require('./error.manager')
 const app = express()
