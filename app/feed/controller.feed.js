@@ -123,6 +123,12 @@ exports.deletePost = async (req, res, next) => {
 
 		clearImage(post.imageUrl)
 		const result = await Post.findByIdAndRemove(postId)
+
+		// Remove post reference from user
+		const user = await User.findById(req.userId)
+		user.posts.pull(postId)
+		await user.save()
+
 		res.status(200).json({ post: result })
 	} catch (error) {
 		next(new ErrorResponse(500, 'Server Issue', [error.message]))
