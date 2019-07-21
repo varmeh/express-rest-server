@@ -8,7 +8,7 @@ const POSTS_PER_PAGE = 2
 exports.getFeedPosts = async (req, res, next) => {
 	const currentPage = req.query.page || 1
 	try {
-		const totalItems = await Post.find().count()
+		const totalItems = await Post.find().countDocuments()
 		const posts = await Post.find()
 			.skip((currentPage - 1) * POSTS_PER_PAGE)
 			.limit(POSTS_PER_PAGE)

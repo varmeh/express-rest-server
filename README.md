@@ -6,6 +6,7 @@
 - User Input Validation - [express-validator](https://express-validator.github.io/docs/)
 - Database ODM - [mongoose](https://mongoosejs.com/)
 - File Upload - [multer](https://www.npmjs.com/package/multer)
+- Password Encryption - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
 ## Running the app
 
