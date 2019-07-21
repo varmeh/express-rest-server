@@ -3,7 +3,7 @@ const { body } = require('express-validator')
 
 const { User } = require('../models')
 const { validationErrorHandler } = require('../error.manager')
-const { signup } = require('./controller.auth')
+const { signup, login } = require('./controller.auth')
 
 const router = express.Router()
 
@@ -30,5 +30,17 @@ const signupValidator = [
 		.isEmpty()
 ]
 router.post('/signup', signupValidator, validationErrorHandler, signup)
+
+const loginValidation = [
+	body('email')
+		.trim()
+		.isEmail()
+		.withMessage('Please enter a valid email.')
+		.normalizeEmail(),
+	body('password')
+		.trim()
+		.isLength({ min: 6 })
+]
+router.post('/login', loginValidation, validationErrorHandler, login)
 
 module.exports = router
