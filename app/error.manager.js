@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator')
+
 /* Log Error Information for the production enginer */
 exports.logError = (error, _req, _res, next) => {
 	console.error(error.stack)
@@ -11,7 +13,7 @@ exports.errorResponse = (error, _req, res, _next) => {
 }
 
 /* Standardized Error */
-exports.ErrorResponse = class extends Error {
+const ErrorResponse = class extends Error {
 	constructor(statusCode = 500, message = '', errors = []) {
 		super(message)
 
@@ -21,4 +23,18 @@ exports.ErrorResponse = class extends Error {
 		this.statusCode = statusCode
 		this.errors = errors
 	}
+}
+exports.ErrorResponse = this.ErrorResponse
+
+/* Validation Error Handler */
+exports.validationErrorHandler = (req, res, next) => {
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		// We have validation error
+		const errorArray = errors
+			.array()
+			.map(({ value, msg, param }) => `'${param}' has ${msg}: ${value}`)
+		throw new ErrorResponse(422, 'Validation failure', errorArray)
+	}
+	next()
 }

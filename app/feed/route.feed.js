@@ -1,6 +1,8 @@
 const express = require('express')
 const { body } = require('express-validator')
 
+const { validationErrorHandler } = require('../error.manager')
+
 const {
 	getFeedPosts,
 	createPost,
@@ -8,6 +10,7 @@ const {
 	updatePost,
 	deletePost
 } = require('./controller.feed')
+
 const router = express.Router()
 
 router.get('/posts', getFeedPosts)
@@ -21,11 +24,16 @@ const userPostValidators = [
 		.trim()
 		.isLength({ min: 5 })
 ]
-router.post('/post', userPostValidators, createPost)
+router.post('/post', userPostValidators, validationErrorHandler, createPost)
 
 router.get('/post/:postId', getPost)
 
-router.put('/post/:postId', userPostValidators, updatePost)
+router.put(
+	'/post/:postId',
+	userPostValidators,
+	validationErrorHandler,
+	updatePost
+)
 
 router.delete('/post/:postId', deletePost)
 

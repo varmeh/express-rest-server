@@ -1,8 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 
-const { validationResult } = require('express-validator')
-
 const { ErrorResponse } = require('../error.manager')
 const { Post } = require('../models')
 
@@ -23,15 +21,6 @@ exports.getFeedPosts = async (req, res, next) => {
 }
 
 exports.createPost = async (req, res, next) => {
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		// We have validation error
-		const errorArray = errors
-			.array()
-			.map(({ value, msg, param }) => `'${param}' has ${msg}: ${value}`)
-		return next(new ErrorResponse(422, 'Validation failure', errorArray))
-	}
-
 	if (!req.file) {
 		return next(
 			new ErrorResponse(422, 'No image provided', ['Please select an image.'])
@@ -75,16 +64,6 @@ exports.getPost = async (req, res, next) => {
 }
 
 exports.updatePost = async (req, res, next) => {
-	/* Handling errors during validation phase */
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		// We have validation error
-		const errorArray = errors
-			.array()
-			.map(({ value, msg, param }) => `'${param}' has ${msg}: ${value}`)
-		return next(new ErrorResponse(422, 'Validation failure', errorArray))
-	}
-
 	try {
 		const post = await Post.findById(req.params.postId)
 		if (!post) {
