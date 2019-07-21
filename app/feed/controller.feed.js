@@ -78,10 +78,15 @@ exports.updatePost = async (req, res, next) => {
 	try {
 		const post = await Post.findById(req.params.postId)
 		if (!post) {
-			return next(
-				new ErrorResponse(404, 'Post not found!', ['Post not found!'])
-			)
+			const errorMessage = 'Post not found!'
+			return next(new ErrorResponse(404, errorMessage, [errorMessage]))
 		}
+
+		if (post.creator.toString() !== req.userId) {
+			const errorMessage = 'Not authorized.'
+			return next(new ErrorResponse(403, errorMessage, [errorMessage]))
+		}
+
 		const { title, content } = req.body
 		post.title = title
 		post.content = content
@@ -104,10 +109,16 @@ exports.deletePost = async (req, res, next) => {
 	const { postId } = req.params
 	try {
 		const post = await Post.findById(postId)
+
 		if (!post) {
 			return next(
 				new ErrorResponse(404, 'Post not found!', ['Post not found!'])
 			)
+		}
+
+		if (post.creator.toString() !== req.userId) {
+			const errorMessage = 'Not authorized.'
+			return next(new ErrorResponse(403, errorMessage, [errorMessage]))
 		}
 
 		clearImage(post.imageUrl)
