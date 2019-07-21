@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 const { ErrorResponse } = require('../error.manager')
-const { Post } = require('../models')
+const { Post, User } = require('../models')
 
 const POSTS_PER_PAGE = 2
 exports.getFeedPosts = async (req, res, next) => {
@@ -32,14 +32,25 @@ exports.createPost = async (req, res, next) => {
 		title,
 		content,
 		imageUrl: req.file.path,
-		creator: { name: 'dummy' }
+		creator: req.userId
 	})
 	try {
+		// Add post reference to User model
+		const user = await User.findById(req.userId)
+
 		const result = await post.save()
 		console.log(result)
+
+		user.posts.push(post)
+		await user.save()
+
 		res.status(201).json({
 			message: 'Post created successfully',
-			post: result
+			post: result,
+			creator: {
+				_id: user._id,
+				name: user.name
+			}
 		})
 	} catch (error) {
 		next(new ErrorResponse(500, 'Db Save failure', [error.message]))
