@@ -7,7 +7,7 @@ exports.logError = (error, _req, _res, next) => {
 }
 
 /* Send Error Response to client */
-exports.errorResponse = (error, _req, res, _next) => {
+exports.sendErrorResponse = (error, _req, res, _next) => {
 	const { statusCode, message, errors } = error
 	res.status(statusCode).json({ message, errors })
 }
@@ -25,7 +25,7 @@ const ErrorResponse = class extends Error {
 	}
 }
 
-exports.ErrorResponse = this.ErrorResponse
+exports.ErrorResponse = ErrorResponse
 
 /* Validation Error Handler */
 exports.validationErrorHandler = (req, res, next) => {

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 const configureMiddlewares = require('./middlewares')
 const integrateRoutes = require('./route.integrator')
-const { logError, errorResponse } = require('./error.manager')
+const { logError, sendErrorResponse } = require('./error.manager')
 const app = express()
 
 configureMiddlewares(app)
@@ -11,7 +11,7 @@ integrateRoutes(app)
 
 /* Central Error Handling - Should be done after all the middleware & route configuration */
 app.use(logError)
-app.use(errorResponse)
+app.use(sendErrorResponse)
 
 const port = process.env.PORT || 4000
 
