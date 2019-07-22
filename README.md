@@ -9,6 +9,12 @@
 - Password Encryption - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - JWT - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 
+## Testing Packages
+
+- mocha
+- chai
+- sinon
+
 ## Running the app
 
 ```bash

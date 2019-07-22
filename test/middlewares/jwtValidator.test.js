@@ -1,4 +1,7 @@
 const { expect } = require('chai')
+const sinon = require('sinon')
+const jwt = require('jsonwebtoken')
+
 const jwtValidator = require('../../app/middlewares/jwtValidator')
 
 describe('Middleware', () => {
@@ -29,7 +32,14 @@ describe('Middleware', () => {
 					return 'bearer xyz'
 				}
 			}
-			expect(jwtValidator.bind(this, req, {}, () => {})).to.throw()
+			sinon.stub(jwt, 'verify')
+			jwt.verify.returns({ userId: 'abc' })
+
+			jwtValidator(req, {}, () => {})
+			expect(jwt.verify.called).to.be.true
+			expect(req).to.have.property('userId', 'abc')
+
+			jwt.verify.restore()
 		})
 	})
 })
