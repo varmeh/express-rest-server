@@ -4,7 +4,7 @@
 	"description": "A dummy rest server",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha",
+		"test": "mocha --recursive",
 		"start": "nodemon app/app.js"
 	},
 	"author": "varmeh",
