@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const helmet = require('helmet')
 
 const { terminalLogger, fileLogger } = require('./logger')
 const corsHandler = require('./corsHandler')
@@ -8,6 +9,9 @@ const { imageLoader, removePublicFromImageUrl } = require('./upload')
 const jwtValidator = require('./jwtValidator')
 
 exports.configureMiddlewares = app => {
+	// Secure your express api with helmet
+	app.use(helmet())
+
 	// Configure logging first
 	app.use(terminalLogger)
 	app.use(fileLogger)
