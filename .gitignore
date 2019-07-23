@@ -6,3 +6,4 @@ public/
 # Files
 server.log
 local-env.sh
+nodemon.json
