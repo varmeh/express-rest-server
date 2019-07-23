@@ -15,6 +15,11 @@
 - chai
 - sinon
 
+## Env Variables
+
+- MONGO_URI - url to mongodb database
+- JWT_SECRET - signature for jsonwebtoken
+
 ## Running the app
 
 ```bash
