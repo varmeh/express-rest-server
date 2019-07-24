@@ -13,8 +13,6 @@ integrateRoutes(app)
 app.use(logError)
 app.use(sendErrorResponse)
 
-const port = process.env.PORT || 4000
-
 const run = async () => {
 	try {
 		const result = await mongoose.connect(process.env.MONGO_URI, {
@@ -22,8 +20,9 @@ const run = async () => {
 			poolSize: 10
 		})
 		console.log(result)
-		app.listen(port, () => {
-			console.log(`Server on http://localhost:${port}`)
+		const server = app.listen(process.env.PORT || 4000, () => {
+			const { address, port } = server.address()
+			console.log(`Server running at http://${address}:${port}`)
 		})
 	} catch (error) {
 		console.error('Mongoose Connection failed with error', error)
